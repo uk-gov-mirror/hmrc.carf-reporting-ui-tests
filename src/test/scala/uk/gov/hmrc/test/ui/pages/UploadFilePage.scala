@@ -22,7 +22,7 @@ object UploadFilePage extends BasePage {
 
   def fileUpload(file: String): Unit = {
     uploadAnyFile(file)
-    click(submitButtonId)
+    click(continueButtonId)
   }
 
 }

@@ -22,7 +22,7 @@ class ReportingSpec extends BaseSpec {
 
   Feature("Reporting Upload file journeys") {
 
-    Scenario("1 - Organisation user uploads Valid file", ReportingTests) {
+    Scenario("1 - Organisation user uploads Valid file - Slow journey", ReportingTests) {
 
       Given("the Organisation user logs in with a valid CARF ID")
       AuthLoginPage.loginAsOrgAdminWithoutCtUtr("RG1111")
@@ -31,13 +31,27 @@ class ReportingSpec extends BaseSpec {
       ServiceHomePage.clickOnLink(ServiceHomePage.uploadXmlFileLink)
 
       And("the Organisation user uploads a valid file on '/upload-file' page")
-      UploadFilePage.fileUpload("Valid.xml")
+      UploadFilePage.fileUpload("valid-carf.xml")
 
-      And("the Organisation user is on '/check-your-file-details' page")
-      CheckYourDetailsPage.onPage()
+      And("the Organisation user clicks 'Continue' on '/check-your-file-details' page")
+      CheckYourFileDetailsPage.onPageContinueById()
+
+      And("the Organisation user click 'Confirm and send' on '/send-your-file' page")
+      SendYourFilePage.onPageSubmitById()
+      SendYourFilePage.loadingSpinnerDisappear()
+
+      And("the Organisation user is on place holder page") // TODO: Remove this step after CARF-621
+      PlaceHolderPage.onPage()
+
+      And("the Organisation user navigates to '/still-checking-your-file' page") // TODO: Remove this step after CARF-621
+      StillCheckingYourFilePage.navigateToStillCheckingYourFilePage()
+
+      And("the Organisation user clicks 'Refresh for updates' button on '/still-checking-your-file' page")
+      StillCheckingYourFilePage.onPageRefreshForUpdatesById()
+
       // TODO: Continue journey as pages are implemented
     }
-    Scenario("2 - Organisation user uploads Invalid file", ReportingTests) {
+    Scenario("2 - Organisation user uploads Invalid file", SoloTests) { // TODO: Update tag once scenarios are confirmed
       Given("the Organisation user logs in with a valid CARF ID")
       AuthLoginPage.loginAsOrgAdminWithoutCtUtr("RG1111")
 
